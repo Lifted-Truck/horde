@@ -3547,7 +3547,16 @@ struct Plugin
       if (id >= 57 && id <= 64)  // ADR-054 FX rack: type/amount pairs → rack
       {
         const int slot = (int)(id - 57) / 2;
-        if (((id - 57) & 1) == 0) rack.setType(slot, (int)applied);
+        if (((id - 57) & 1) == 0)
+        {
+          /* Instance caps are enforced HERE, the one choke point every type
+             write passes (GUI, host automation, preset load, morph): a type
+             that is already held to its cap elsewhere is REFUSED and the slot
+             keeps its type — readback reports the rack, so host and GUI see
+             the refusal rather than a phantom second Comb. */
+          if (!rack.typeAllowed(slot, (int)applied)) return;
+          rack.setType(slot, (int)applied);
+        }
         else rack.setAmount(slot, applied);
         return;
       }

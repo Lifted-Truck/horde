@@ -1,0 +1,148 @@
+<title>horde Roadmap Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Tokens from the instrument's own screen: paper ground, horde pink, the four morph-corner colours as STATUS. */
+  :root {
+    --paper:#F3EFE6; --panel:#FFFFFF; --ink:#191521; --ink2:#6F6A78; --line:#DAD4C8;
+    --pink:#F5169C; --pink-ink:#B70E73;
+    --cA:#E5C000; --cB:#FF2E88; --cC:#00B5AA; --cD:#7FBF00;      /* A yellow · B pink · C teal · D lime */
+    --shipped:var(--cC); --partial:var(--cA); --ruling:var(--cB); --open:#9A94A4;
+    --tube:#EFE9FF; --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --disp:'Syne','IBM Plex Sans',sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --paper:#17141C; --panel:#221E29; --ink:#ECE7F2; --ink2:#A39CB0; --line:#3A3444;
+    --pink:#FF4FB4; --pink-ink:#FF8ACB; --cA:#FFD702; --cC:#2ED3C8; --cD:#A6F219; --open:#7C7589; --tube:#2A2440; } }
+  :root[data-theme="dark"] {
+    --paper:#17141C; --panel:#221E29; --ink:#ECE7F2; --ink2:#A39CB0; --line:#3A3444;
+    --pink:#FF4FB4; --pink-ink:#FF8ACB; --cA:#FFD702; --cC:#2ED3C8; --cD:#A6F219; --open:#7C7589; --tube:#2A2440; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.5 var(--sans); }
+  .wrap { max-width:1180px; margin:0 auto; padding:36px 28px 64px; }
+  header { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:end; margin-bottom:22px; }
+  h1 { font:800 34px/1.05 var(--disp); letter-spacing:-.02em; margin:0; text-wrap:balance; }
+  h1 em { font-style:normal; color:var(--pink); }
+  .sub { color:var(--ink2); margin:8px 0 0; max-width:62ch; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; font:12px var(--mono); color:var(--ink2); }
+  .legend span::before { content:''; display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px; background:var(--k); }
+  .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:22px 0 26px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .stat b { display:block; font:700 26px/1 var(--disp); font-variant-numeric:tabular-nums; }
+  .stat small { font:12px var(--mono); color:var(--ink2); letter-spacing:.04em; text-transform:uppercase; }
+  .decision { background:var(--tube); border:1.5px solid var(--pink); border-radius:12px; padding:16px 18px; margin:0 0 28px; display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start; }
+  .decision .tag { font:600 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--pink-ink); background:var(--panel); border:1px solid var(--pink); border-radius:999px; padding:4px 10px; white-space:nowrap; }
+  .decision h2 { font:700 17px/1.3 var(--disp); margin:0 0 6px; }
+  .decision p { margin:0; max-width:78ch; }
+  .lanes { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; align-items:start; }
+  .lane { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .lane h3 { font:700 14px/1.25 var(--disp); margin:0 0 2px; text-wrap:balance; }
+  .lane .n { font:11px var(--mono); color:var(--ink2); letter-spacing:.06em; text-transform:uppercase; }
+  .item { border-left:3px solid var(--k); background:var(--paper); border-radius:0 8px 8px 0; padding:8px 10px; }
+  .item .id { font:500 11px var(--mono); color:var(--ink2); }
+  .item .t { font-weight:600; font-size:13.5px; line-height:1.3; margin:2px 0 3px; }
+  .item .s { font:11px/1.4 var(--mono); color:var(--ink2); }
+  .item .s b { color:var(--k); font-weight:500; }
+  .rulings { margin-top:30px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .rulings h2 { font:700 18px var(--disp); margin:0 0 8px; }
+  .rulings ol { margin:0; padding-left:20px; columns:2; column-gap:28px; }
+  .rulings li { break-inside:avoid; margin:0 0 8px; max-width:60ch; }
+  .rulings li code, .item code { font:12px var(--mono); background:var(--tube); padding:1px 5px; border-radius:4px; }
+  .foot { margin-top:22px; font:12px var(--mono); color:var(--ink2); }
+  @media (max-width:900px) { .stats { grid-template-columns:repeat(2,1fr); } .rulings ol { columns:1; } header { grid-template-columns:1fr; } }
+</style>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>horde <em>roadmap</em> by priority track</h1>
+      <p class="sub">The human's seven priorities (2026-09-05) with every queue item that hangs from them. Statuses are read from ROADMAP.md and DECISIONS.md as of 2026-09-05 — not aspirations.</p>
+    </div>
+    <div class="legend">
+      <span style="--k:var(--shipped)">shipped</span>
+      <span style="--k:var(--partial)">partial / in flight</span>
+      <span style="--k:var(--ruling)">needs a ruling</span>
+      <span style="--k:var(--open)">open</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>13</b><small>shipped increments</small></div>
+    <div class="stat"><b>7</b><small>in flight</small></div>
+    <div class="stat"><b>6</b><small>rulings owed by the human</small></div>
+    <div class="stat"><b>11</b><small>open lanes</small></div>
+  </div>
+
+  <div class="decision">
+    <div class="tag">Design ruling · FX</div>
+    <div>
+      <h2>Bounded pool, not once-per-module and not unlimited instances</h2>
+      <p>Every module is a permanent node in the crosspoint matrix; coefficient 0 = absent. Three constraints lock it: ADR-088 made connect/disconnect a continuous coefficient so a morph never hard-cuts topology; QM-4 makes module <em>presence</em> structural (atomic, never blended — an unlimited-instance design would cut reverb tails mid-morph); and real-time safety preallocates. Per-type caps give Serum-like richness (delay ×2, distortion ×2) while singletons stay singletons — the Comb is cap 1 by evidence, and that cap now ships enforced. Open for you: pool sizes, and slots-vs-palette in the UI.</p>
+    </div>
+  </div>
+
+  <div class="lanes">
+    <section class="lane"><div class="n">track 1</div><h3>FX final form</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">this PR</div><div class="t">Comb singleton guard</div><div class="s"><b>shipped</b> · caps in rack, refused at choke point, combguard_check</div></div>
+      <div class="item" style="--k:var(--ruling)"><div class="id">B95</div><div class="t">Module policy: bounded pool</div><div class="s"><b>ruling</b> · pool sizes · slots vs palette</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B50</div><div class="t">Visual routing matrix</div><div class="s"><b>open</b> · FIRST, by the 08-28 build order</div></div>
+      <div class="item" style="--k:var(--partial)"><div class="id">B73</div><div class="t">Echo / Room feedback</div><div class="s"><b>partial</b> · inc A Delay shipped; B, C open</div></div>
+      <div class="item" style="--k:var(--partial)"><div class="id">B92</div><div class="t">Note-event transport</div><div class="s"><b>holding</b> · Q3 ratified; mechanics at trigger</div></div>
+      <div class="item" style="--k:var(--shipped)"><div class="id">B49 · ADR-131</div><div class="t">Slot ramp rule + real slot params</div><div class="s"><b>shipped</b></div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 2</div><h3>Macro / XY logic</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-150 · 151</div><div class="t">MAIN pad, morph mini, wheels, None + reach</div><div class="s"><b>shipped</b></div></div>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-152</div><div class="t">Macro suspension under morph; capture flattens</div><div class="s"><b>shipped</b> · the interim</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B89</div><div class="t">QM-4 intent bus</div><div class="s"><b>open</b> · classification PR first · seed reshuffle()</div></div>
+      <div class="item" style="--k:var(--partial)"><div class="id">B77</div><div class="t">STRATA nested XY</div><div class="s"><b>partial</b> · core + oracle; sign-offs owed</div></div>
+      <div class="item" style="--k:var(--shipped)"><div class="id">B72</div><div class="t">Route IDs across the morph</div><div class="s"><b>answered</b> · routes flip with their atom (QM-4 §6.2)</div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 3</div><h3>Filters</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">B81 inc 1 · ADR-148</div><div class="t">Per-voice audio seam</div><div class="s"><b>shipped</b> · bit-identical no-op</div></div>
+      <div class="item" style="--k:var(--shipped)"><div class="id">B81 inc 2·1 · ADR-153</div><div class="t">SvfCore + svf_check</div><div class="s"><b>shipped</b> · oracle caught k-law day one</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B81 inc 2·2</div><div class="t">Pair + routing + filter env (slot 18) + FILT page</div><div class="s"><b>open</b> · next lane</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B82</div><div class="t">Per-note modulation</div><div class="s"><b>open</b> · unblocks B91 key source</div></div>
+      <div class="item" style="--k:var(--ruling)"><div class="id">B93 · B94</div><div class="t">Morph hold colour · bend damping</div><div class="s"><b>triaged</b> · keep/drop hold · ζ floor · quant order</div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 4</div><h3>New FX modules</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-142</div><div class="t">Standard Delay (slot type 9)</div><div class="s"><b>shipped</b> · delay_check</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">new</div><div class="t">Reverb</div><div class="s"><b>open</b> · distinct from Room (swarm reverb)</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">08-06 class</div><div class="t">Kuro-chorus</div><div class="s"><b>open</b> · kuro-synced module CLASS, not a one-off</div></div>
+      <div class="item" style="--k:var(--partial)"><div class="id">FX-C · ADR-092</div><div class="t">Distortion / saturation / waveshaping</div><div class="s"><b>candidate</b> · WARP prototype; seed its RNG</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">TBA</div><div class="t">Module in workshop</div><div class="s"><b>open</b> · lands into the pool</div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 5</div><h3>Mod matrix fill</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-136…141 · 149</div><div class="t">Matrix, halos, sources, MIDI/MPE, persistence</div><div class="s"><b>shipped</b></div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B16 · task 19</div><div class="t">Kuro LFO + modulator family (C++) + editor</div><div class="s"><b>open</b></div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B96</div><div class="t">Mapping shortcuts — save/load route sets</div><div class="s"><b>open</b> · keyed on (src,dest) identity</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B84</div><div class="t">Tree-based undo + History tab</div><div class="s"><b>open</b></div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 6</div><h3>Morph interface</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-104…111</div><div class="t">Field, corners, arm/edit, owners, exempt</div><div class="s"><b>shipped</b></div></div>
+      <div class="item" style="--k:var(--shipped)"><div class="id">B85 · B93</div><div class="t">Mini pad on MAIN · held marker</div><div class="s"><b>shipped</b> · first landings</div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">B97</div><div class="t">The morph lab comes home: full table, per-param distribution grids</div><div class="s"><b>open</b> · rides B89's classification</div></div>
+    </section>
+
+    <section class="lane"><div class="n">track 7</div><h3>Saw-shape lab</h3>
+      <div class="item" style="--k:var(--shipped)"><div class="id">ADR-094 · 101 · 133</div><div class="t">Saw shape section + engine-drawn wave</div><div class="s"><b>shipped</b></div></div>
+      <div class="item" style="--k:var(--open)"><div class="id">Campaign-2 · 6</div><div class="t">shape-lab: sync · phase-warp formants · ripple</div><div class="s"><b>open</b> · fold into swarmsaw.html, then port</div></div>
+    </section>
+  </div>
+
+  <div class="rulings">
+    <h2>Rulings owed by the human</h2>
+    <ol>
+      <li><b>B95</b> pool sizes per type, and slots-vs-palette for the UI.</li>
+      <li><b>B93</b> keep or drop ADR-108's hold (lead: drop — inert values cost nothing audible).</li>
+      <li><b>B94</b> floor ζ on the default distance curve (ADR; parity-safe) · which "scale" quantise is default.</li>
+      <li><b>B87</b> K-centre anchor law: spring vs phantom pacemaker.</li>
+      <li><b>Oracles into <code>./verify</code></b>: delay · strata · voicetap · svf · combguard checks are all GREEN and all unwired.</li>
+      <li><b>B77</b> STRATA sign-offs; <b>B86</b> chirp audition; logo hue-flip winner.</li>
+    </ol>
+  </div>
+  <p class="foot">Rendered by the HYPERSAW lead session · sources: ROADMAP.md (B-rows, PRIORITY TRACKS), DECISIONS.md (ADR-088…153) · counts are of items on this map.</p>
+</div>

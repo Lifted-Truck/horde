@@ -215,6 +215,27 @@ class FxRack
     combNorm = normSec > 0 ? 1.0 - std::exp(-1.0 / (normSec * sr)) : 1.0;
   }
 
+  /* INSTANCE CAPS (2026-09-05). The Comb is a SINGLETON by construction: its
+     eight KS lines are ONE bank owned by the rack (`combs[]`, fed by the
+     shell's note events), and every Comb slot iterates that same bank — a
+     second Comb slot writes each line twice per block and advances its write
+     pointer twice, so the feedback compounds past unity and the tuning
+     halves. The human loaded a second Comb by accident and it "blew up the
+     audio". Everything else owns per-slot state and may repeat. Indexed by
+     FxType; kRackSlots = unlimited. The B95 pool policy may lower others. */
+  static constexpr int kSlotMaxInstances[10] = {
+      kRackSlots, kRackSlots, kRackSlots, kRackSlots,   // Off, Drive, Filter, Gain
+      kRackSlots, 1,          kRackSlots, kRackSlots,   // Comp, COMB, Notch, Echo
+      kRackSlots, kRackSlots};                          // Room, Delay
+  int typeOf(int slot) const { return (int)slots[slot].type; }
+  bool typeAllowed(int slot, int type) const
+  {
+    if (type < 0 || type >= 10) return false;
+    int held = 0;
+    for (int k = 0; k < kRackSlots; k++)
+      if (k != slot && (int)slots[k].type == type) held++;
+    return held < kSlotMaxInstances[type];
+  }
   void setType(int slot, int type)
   {
     if (slot < 0 || slot >= kRackSlots) return;
