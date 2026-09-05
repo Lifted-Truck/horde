@@ -365,6 +365,11 @@ endif()
 # + RSS under a seeded stream, static and morphing. Not a gate.
 add_executable(ratchet_probe tools/ratchet_probe.cpp)
 target_link_libraries(ratchet_probe PRIVATE ${PROJECT_NAME}-impl)
+# combguard_check: a second Comb slot is impossible by construction (rack
+# instance caps, refused at the shell's choke point). Standalone, unwired.
+add_executable(combguard_check tools/combguard_check.cpp)
+target_link_libraries(combguard_check PRIVATE ${PROJECT_NAME}-impl)
+
 # morphscope_probe: WHERE does an edit land under the morph (mode x arm x
 # puck position), read back corner by corner. Diagnostic for the 2026-09-03
 # "globals act like corner params" report; prints, never judges.
