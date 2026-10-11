@@ -1,0 +1,13 @@
+{
+  "_doc": "The human's ledger for two things ADR-209 item 2 allows: an ACCEPTED LIMIT on a catalogue row that reads green (the row stays green while the limit is in force), and an EXPIRY on a HOLE (a risk row that has no gate yet). Only the human may add or change an entry: this file is code-owned in .github/CODEOWNERS, so a pull request that touches it needs the human's review. An entry whose `expires` date has passed is reported by tools/ledger_owner_check.py under EXPIRED; it never turns ./verify red by itself, and the dashboard treats the row as partial again. The file starts with no entries: nothing is accepted until the human accepts it.",
+  "_schema": {
+    "entries": "list of objects, each with exactly the keys below",
+    "id": "string, unique in this file, for example A001",
+    "row": "string, an id in docs/armor/catalogue.json (R1 to R12, S1 to S7, SEC-input, SEC-webview, SEC-supply, SEC-hygiene)",
+    "kind": "accepted_limit or hole_expiry",
+    "text": "string, the limit or the hole in plain words, and what would end it",
+    "approved": "string, the human's ruling: an ADR or ROADMAP reference, never an agent's own word",
+    "expires": "ISO date YYYY-MM-DD; after it the row is partial again"
+  },
+  "entries": []
+}
