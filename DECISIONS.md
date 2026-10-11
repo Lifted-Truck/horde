@@ -7716,3 +7716,42 @@ option the human chose. Where a ruling is conditional or partial, the item says 
 - Whether ADR-186 §2's "universal" legacy archive is read as "the bundles CI builds" (item 8).
 - Whether GitHub bills this account for macOS runner minutes. CI already has macOS jobs
   on this public repo; the agent token cannot read the billing page.
+
+## ADR-210 — RULED by the human: approvals are authenticated by a machine account; kit 2.9.0 is adopted; Wave 1 starts (B448, B457, 2026-10-11)
+
+**Ruling.** The human, 2026-10-11, in reply to the lead's three requests (a mechanism for
+ADR-209 item 3, the two approvals B457 needs, and a go for Wave 1): "go with your recommendations
+and start Wave 1".
+
+**Decision.**
+1. **Approvals are authenticated by a machine account** (option A of ADR-209).
+   - A second GitHub account, used only by the agent, authors the agent's PRs. The human's review
+     of a PR that touches a ledger is then a real second identity.
+   - The human creates the account, invites it, and puts its token where the agent runs. The agent
+     does none of that: it does not create accounts or handle credentials.
+   - The repo side is package P1: a CODEOWNERS file naming the human for the ledgers, a check that
+     no ledger is unowned, and `docs/armor/acceptances.json`.
+   - **Order matters.** The ruleset's "require code-owner review" is switched on only after the
+     machine account is in use. Switched on before, every agent PR that touches a ledger could
+     never be merged, because GitHub does not let an author approve their own PR.
+   - The live drill of P1's acceptance (an agent-authored PR touching a ledger cannot merge without
+     the human) is run by the human and the lead once both are in place.
+2. **B457 is approved.** The lead read the reply as covering the two approvals it had asked for by
+   name. Each lands in its own PR, which the human merges or declines.
+   - The lead replaces `.claude/hooks/stop-gate.sh` with the kit's shim, in blocking mode,
+     first-hand.
+   - `./verify`'s gates are wrapped with the kit's receipt helper. This follows the Wave 1 wiring,
+     so that `verify` is edited once.
+   - `tools/stop_gate_check.py` is kept, pointed at the vendored gate, as horde's contract test.
+3. **Wave 1 starts.** Dispatched 2026-10-11, each in its own worktree and branch, models pinned:
+   P1 (approvals, repo side), P2 (engine harness and enrolment), P5 (nightly runner), P8 (golden
+   registry), P16 (engine realtime probe, lint and the flush-to-zero measurement), P17 (shell
+   acceptance list).
+   - P3 (fuzz), P4 (invariance matrix) and P6 (soak) follow P2, which they are built on. P6 also
+     needs P5.
+   - P14 (root-cause rule for clamps) follows P1.
+   - The lead does the shared wiring (`verify`, `CMakeLists.txt`, the catalogue) after the
+     packages merge, as in Waves A to C.
+
+**Not ruled here.** Whether bit-identity pins count as goldens (the proposal's §7). P8 registers
+them as "prototype parity at pin, sign-off pending" on the lead's reading, and says so in its file.
