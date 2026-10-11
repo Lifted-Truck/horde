@@ -7753,5 +7753,17 @@ and start Wave 1".
    - The lead does the shared wiring (`verify`, `CMakeLists.txt`, the catalogue) after the
      packages merge, as in Waves A to C.
 
+**GATE-CHANGE: the Stop hook becomes the kit's shim, and its tree test blocks in this repo.**
+`.claude/hooks/stop-gate.sh` drops horde's own tree-state code (PR #1029) and runs the kit-owned
+`.kit/stop-gate.sh` (kit 2.9.0) with `KIT_STOP_GATE_MODE=deny`. It is a replacement and a
+tightening, not a weakening: the kit's gate blocks every case ours blocked, and also a file deleted
+after verify. `tools/stop_gate_check.py` holds it, 20 rows with two controls. Approved by the human
+(item 2 above); edited by the lead first-hand.
+
+**Correction to ADR-209 item 7.** It cites "the latch-and-report guard of ADR-186 §4". ADR-186 §4
+is "cores are copied forward". The guard's rule is ADR-197 (risk row 3 and edit D: output guards
+latch and report), and the code is `src/output_latch.h`. The ruling itself is unchanged. Found by
+the P17 agent.
+
 **Not ruled here.** Whether bit-identity pins count as goldens (the proposal's §7). P8 registers
 them as "prototype parity at pin, sign-off pending" on the lead's reading, and says so in its file.
