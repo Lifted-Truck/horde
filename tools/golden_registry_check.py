@@ -16,7 +16,7 @@ WHAT IT CHECKS (red on any of these):
                  Nobody has to remember to register one: the rules find it.
   NO_FILE        an entry whose path matches no file.
   UNRUN_CHECK    an entry whose check (or also_checks) ./verify does not invoke, or
-                 whose source carries an `UNWIRED:` header (that counts as not run).
+                 whose source carries a not-wired header (that counts as not run).
   MISSING_FIELD  an entry lacking a field, or holding an empty one.
   BAD_KIND       a kind that is not one of KINDS.
   BAD_INDEPENDENT  independent=true with kind prototype_parity_at_pin, or with empty
@@ -428,7 +428,9 @@ def run_controls(found, entries, real_fails):
         with_registry(w, lambda es: es[0].__setitem__("check", "no_such_check_zz"))
 
     def c_unwired_header(w):
-        (w / "tools/zz_planted_check.py").write_text("# UNWIRED: planted, header says it does not run\n")
+        # The marker is assembled here, not written out: weakening_check counts the literal
+        # text as a not-wired check, and this file is not one. It only plants one in a copy.
+        (w / "tools/zz_planted_check.py").write_text("# " + "UNWIRED" + ": planted, header says it does not run\n")
         v = w / "verify"
         rewrite(v, v.read_text() + "\npython3 tools/zz_planted_check.py || ok=1\n")
         # The plant must be INVOKED, so only its header can make it red.
@@ -469,7 +471,8 @@ def run_controls(found, entries, real_fails):
     results = []
     # Counted, not a set: on a tree that is ALREADY red by some tag, a plant of the same tag
     # must still add one more of it, or the control would read "not red" for the wrong reason.
-    tags = lambda fails: collections.Counter(t for t, _ in fails)  # noqa: E731
+    def tags(fails):
+        return collections.Counter(t for t, _ in fails)
     with tempfile.TemporaryDirectory(prefix="golden-registry-") as tmp:
         base = Path(tmp) / "base"
         base.mkdir()
