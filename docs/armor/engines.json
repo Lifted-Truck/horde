@@ -1,0 +1,35 @@
+{
+ "schema": "horde2.armor.engines/1",
+ "about": "The enrolment registry of Blind-Spot Armor phase 2 (ROADMAP B448, package P2, ADR-209; docs/strategy/blind-spot-armor-phase2.md section 2 rule 4): every directory under h2/ that holds C or C++ code is listed here. An engine or a module must be ENROLLED in the engine harness (h2/harness/): it has an adapter, a row in h2/harness/adapters.h and reference patches. A directory that is neither is listed with the reason it is not enrolled. tools/engine_enrolment_check.py finds the directories by itself and is red for one that has no entry, so a new engine cannot stay outside the fuzz, the invariance matrix and the soak by being forgotten.",
+ "how_to_enrol": "h2/harness/README.md, section 'Enrolling an engine or a module'.",
+ "kinds": {
+  "engine": "Product DSP that makes sound from notes. Must be enrolled.",
+  "module": "Product DSP that processes sound (an effect, a filter). Must be enrolled.",
+  "test-reference": "A proven port kept only as a reference for tests. Not enrolled, and the check holds it to that: no enrolled unit and no adapter may include a file from it.",
+  "harness": "The harness itself. Exactly one unit, h2/harness."
+ },
+ "units": [
+  {
+   "path": "h2/engine",
+   "kind": "engine",
+   "id": "composed",
+   "adapter": "h2/harness/adapter_composed.h",
+   "what": "horde 2's one engine: horde's swarm driving SCALPEL's blades (h2/README.md, status table)."
+  },
+  {
+   "path": "h2/cores/scalpel",
+   "kind": "test-reference",
+   "why_not_enrolled": "The blade oracle's port, a TEST REFERENCE since B385 (h2/README.md): the engine copies its blade path and includes none of it, and no product target builds it. Its own parity check gates it (tools/h2_scalpel_parity_check.cpp)."
+  },
+  {
+   "path": "h2/cores/swarm",
+   "kind": "test-reference",
+   "why_not_enrolled": "The lifted legacy swarm core, a TEST REFERENCE since B385 (h2/README.md): not the composed engine's swarm, and no product target builds it. Its parity and lift checks gate it (tools/h2_swarm_parity_check.cpp, tools/h2_lift_check.py)."
+  },
+  {
+   "path": "h2/harness",
+   "kind": "harness",
+   "why_not_enrolled": "The harness itself: adapters, the job runner and the render tool. It makes no sound of its own apart from the two control adapters, which exist to test the checks."
+  }
+ ]
+}
