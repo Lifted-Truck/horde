@@ -429,8 +429,12 @@ def main(argv=None):
         if err:
             print(f"weakening_check: {err}", file=sys.stderr)
             return 1
+        old = baseline.get(cat, {}).get(f, {}).get("count", 0)
+        print(f"weakening_check: APPROVING (the human's call only): this raises the allowed '{cat}' "
+              f"weakening markers in {f} from {old} to {new[cat][f]['count']}, so the extra "
+              f"marker(s) stop reading red; ref {ref.strip()}. Writing {BASELINE_REL}.")
         _write(bpath, new)
-        print(f"weakening: approved {cat} {f} -> {new[cat][f]['count']} ({ref.strip()})")
+        print(f"weakening: approved {cat} {f} ->{new[cat][f]['count']} ({ref.strip()})")
         return 0
 
     if args.tighten:

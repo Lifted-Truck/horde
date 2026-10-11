@@ -1,0 +1,26 @@
+# CODEOWNERS -- who must approve a change to an approval ledger (B448, ADR-209 items 2 and 3).
+#
+# A "ledger" is a pinned file in which a ratchet check records what the human approved: a
+# weakening marker, a tolerance, a parameter id, a build flag, a licence exception, a golden
+# self-digest, an accepted limit or a hole expiry. If an agent can edit a ledger and merge, it
+# can approve its own change. This file names the human as the owner of every ledger, so a pull
+# request that touches one needs the human's review.
+#
+# THIS FILE BINDS NOTHING BY ITSELF. GitHub enforces it only while the main branch ruleset has
+# "Require review from Code Owners" switched on, and only for a pull request whose author is
+# not the owner. That toggle is the human's, and is switched on only once agent pull requests
+# come from the separate machine account (a pull request from the human's own account cannot
+# be approved by the human). Until then this file is a record, and
+# tools/ledger_owner_check.py guards it.
+#
+# ONLY LEDGERS GET AN OWNER. There is deliberately no catch-all `*` rule. To add a ledger: add
+# its rule here AND its path in tools/ledger_owner_check.py (LEDGERS); that check is red if the
+# two disagree, or if a ratchet tool pins a file that is in neither.
+
+/docs/armor/weakening-baseline.json @Julian-B-Smith
+/docs/armor/tolerances.json @Julian-B-Smith
+/docs/armor/acceptances.json @Julian-B-Smith
+/tools/param_id_lock.json @Julian-B-Smith
+/tools/build_flags_pin.json @Julian-B-Smith
+/tools/license_allowlist.json @Julian-B-Smith
+/h2/engine/selfdigest.* @Julian-B-Smith

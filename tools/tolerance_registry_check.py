@@ -616,6 +616,9 @@ def main(argv):
         if err:
             print("tolerance_registry_check: " + err, file=sys.stderr)
             return 1
+        print(f"tolerance_registry_check: APPROVING (the human's call only): this makes the value "
+              f"now in the source file the accepted tolerance for {argv[i + 1]}, so a loosening "
+              f"to that value stops reading red; ref {argv[i + 2]}. Writing {REGISTRY}.")
         save_registry(ROOT, reg)
         print(f"tolerance_registry_check: approved {argv[i + 1]} as {argv[i + 2]}")
         return 0

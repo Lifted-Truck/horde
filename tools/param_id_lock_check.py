@@ -389,7 +389,12 @@ def main(argv):
         if args[:1] == ["--approve-change"]:
             if len(args) != 3 or not args[1].isdigit():
                 raise ValueError("usage: --approve-change <id> <ref>")
-            LOCK.write_text(dump_lock(approve_change(load_lock(), tree, int(args[1]), args[2])), encoding="utf-8")
+            new_lock = approve_change(load_lock(), tree, int(args[1]), args[2])
+            print(f"param_id_lock_check: APPROVING (the human's call only): this re-pins host-visible "
+                  f"parameter id {args[1]} to what the tree says now (a changed range, name or "
+                  f"default, or, if the id is gone, retires it for good), which can change "
+                  f"how saved projects read that id; ref {args[2]}. Writing tools/{LOCK.name}.")
+            LOCK.write_text(dump_lock(new_lock), encoding="utf-8")
             print(f"param_id_lock_check: re-pinned id {args[1]} under {args[2]}")
             return 0
     except ValueError as e:

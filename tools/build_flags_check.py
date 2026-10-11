@@ -776,7 +776,11 @@ def main(argv):
         if args[:1] == ["--approve"]:
             if len(args) != 3:
                 raise ValueError("usage: --approve <target|global|dynamic_loops|entry_points|direct_compiles> <ref>")
-            PIN.write_text(dump_pin(approve(load_pin(), tree, args[1], args[2], fast)) + "\n", encoding="utf-8")
+            new_pin = approve(load_pin(), tree, args[1], args[2], fast)
+            print(f"build_flags_check: APPROVING (the human's call only): this accepts the compile "
+                  f"flags / build settings now in the tree for '{args[1]}' as the pinned ones, so "
+                  f"that change stops reading red; ref {args[2]}. Writing tools/{PIN.name}.")
+            PIN.write_text(dump_pin(new_pin) + "\n", encoding="utf-8")
             print(f"build_flags_check: re-pinned {args[1]} under {args[2]}")
             return 0
     except ValueError as e:
