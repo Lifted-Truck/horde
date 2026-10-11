@@ -12,6 +12,7 @@
  *       const r = render({ patch, sr: 96000, block: 7, seed: 1, seconds: 2, pre: true });
  *       // r.L r.R (the output), r.preL r.preR (the limiter's input), r.summary.digest
  *       const f = features(r, { from: 0.25, to: 1.25 });
+ *       if (f.silent) fail(`${engine}/${patch.name}: silent`);   // the tool's own check goes here
  *     }
  *
  * The rendering is done by the C++ binary h2_harness_render (h2/harness/render_cli.cpp),

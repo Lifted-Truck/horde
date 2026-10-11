@@ -40,6 +40,7 @@ for (const engine of enrolled())                 // ids from docs/armor/engines.
     r.summary.digest;                            // 16 hex digits over the output samples
     r.summary.unknownKeys;                       // keys the engine did not have
     const f = features(r, { from: 0.25, to: 1.25 });   // tools/patchspace/metrics.mjs
+    if (f.silent) fail(`${engine}/${patch.name}: silent, ${f.rmsDb} dBFS`);   // the tool's own check goes here
   }
 ```
 
