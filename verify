@@ -1062,6 +1062,7 @@ full() {
   # WARNING + SKIPPED, never GREEN. Never baselined or allowlisted. Added under
   # ADR-180 §1.
   python3 tools/rtsan_check.py || return 1
+  python3 tools/h2_engine_rtsan_check.py || return 1
 
   # THREAD SAFETY, THE MAIN-THREAD/AUDIO-THREAD HANDOFF (B448 B2, ADR-197 risk
   # row 2, ADR-199). The real shell under ThreadSanitizer: the audio thread
