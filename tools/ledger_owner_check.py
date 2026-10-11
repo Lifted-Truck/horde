@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ledger_owner_check -- every approval ledger has a code owner, and acceptances.json is well formed.
 
-UNWIRED: the lead wires this into ./verify in the Wave 1 wiring PR (B448, ADR-209)
+WIRED: ./verify fast
 
 WHY. A ratchet check (weakening, tolerance, parameter id, build flag, licence, self-digest) is only
 as strong as who may approve into its ledger. ADR-209 item 3: only the human approves. The

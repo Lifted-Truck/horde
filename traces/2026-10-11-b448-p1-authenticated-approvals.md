@@ -15,10 +15,12 @@
   raised as an open question); adding `docs/port/divergences.json`, `h2/cores/swarm/lift-ledger.json`
   (pinned by checks but not in the brief's list: shown every run as PINNED, NOT A LEDGER YET for the human to
   rule); a printed approval on `license_audit_check` (it has no approve path: its exceptions are hand-edited).
-- **Verify:** `./verify fast`, exit 1, git 27047c2 (`.harness/last-verify.json`). The only red line is
-  `weakening_check: FAILED -- ... tools/ledger_owner_check.py: unwired 0 -> 1`: the brief's mandated
-  `UNWIRED:` header counts as a new `unwired` marker and needs the human's approval in
-  `docs/armor/weakening-baseline.json` (out of scope; not written). Not pushed, no PR (the push is gated on exit 0).
+- **Verify:** first run `./verify fast` exit 1: the brief's `UNWIRED:` header counted as a new `unwired`
+  weakening marker (0 -> 1), which only the human may approve. The lead amended the brief: wire the check
+  instead (one added line in `verify` after `weakening_check`, header flipped to `WIRED: ./verify fast`).
+  Second run `./verify fast` exit 0 (`.harness/last-verify.json`, base git 7f5116b plus the uncommitted wiring);
+  `weakening: 80 markers across 6 categories, 0 increases`; `docs/armor/weakening-baseline.json` unchanged
+  against origin/main; `ledger_owner_check: GREEN (... 15 controls fired as expected)`.
 - **Open questions:** whether the human approves the `unwired` marker, or the lead wires the check in this PR
   instead; whether CODEOWNERS, the ratchet tools' sources and `tools/ledger_owner_check.py` should be owned
   too (an agent can otherwise edit the owner record or the check); the two unlisted pinned files.
