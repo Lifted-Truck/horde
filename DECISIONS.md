@@ -7799,3 +7799,21 @@ the table.
 
 **Unchanged.** The machine account is the human's to create (ADR-210 item 1), and "require
 code-owner review" stays off until agent PRs come from it.
+
+## ADR-212 — RULED by the human: the engine RealtimeSanitizer probe's compiler flags are approved (B448 P16, 2026-10-11)
+
+**Ruling.** The human, 2026-10-11: "approve the probe's flags".
+
+**Decision.**
+- `tools/h2_engine_rtsan_check.py` compiles its probe with `-std=gnu++20 -O1 -g
+  -fno-omit-frame-pointer -ffp-contract=off -fsanitize=realtime`. These join the `direct_compiles`
+  section of `tools/build_flags_pin.json`. The pin changes by two lines: the new entry and this
+  reference.
+- The flags are the legacy `rtsan_check`'s plus `-ffp-contract=off`, which every target that
+  includes the horde 2 engine must carry (`h2_rules_check`).
+- The lead made the ledger edit on the human's word, with `build_flags_check.py --approve`. Under
+  ADR-210 item 1 such an edit will need the human's own review once agent PRs come from the
+  machine account; until then this record is the trace.
+
+**Evidence.** The probe, in PR #1047: 543 of 543 scenarios judged, 0 violations; its planted
+allocation is reported on every run; a run that judges fewer than 543 is red.
